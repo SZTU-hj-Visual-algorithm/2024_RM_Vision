@@ -1,0 +1,4 @@
+/home/steins_xin/CLionProjects/RM_Detection/Package/HIK_Camera/cmake-build-debug/CMakeFiles/HIK_Camera.dir
+/home/steins_xin/CLionProjects/RM_Detection/Package/HIK_Camera/cmake-build-debug/CMakeFiles/HIK_SDK.dir
+/home/steins_xin/CLionProjects/RM_Detection/Package/HIK_Camera/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/steins_xin/CLionProjects/RM_Detection/Package/HIK_Camera/cmake-build-debug/CMakeFiles/rebuild_cache.dir

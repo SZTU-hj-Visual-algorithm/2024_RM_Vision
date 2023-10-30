@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Armor_Track",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Armor_Track::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Armor_Track-Debug-f34f6e2333c57c8bb421.json",
+					"name" : "Armor_Track",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Armor_Track_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Armor_Track_test-Debug-202847864695de6cd2f0.json",
+					"name" : "Armor_Track_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/steins_xin/CLionProjects/RM_Detection/Package/Armor_Track/cmake-build-debug",
+		"source" : "/home/steins_xin/CLionProjects/RM_Detection/Package/Armor_Track"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "AngleSolve",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "AngleSolve::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-AngleSolve-Debug-0ebcc428a35bead431e3.json",
+					"name" : "AngleSolve",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "AngleSolve_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-AngleSolve_test-Debug-9a56c25939a568fc74f6.json",
+					"name" : "AngleSolve_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/steins_xin/CLionProjects/RM_Detection/Package/AngleSolve/cmake-build-debug",
+		"source" : "/home/steins_xin/CLionProjects/RM_Detection/Package/AngleSolve"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

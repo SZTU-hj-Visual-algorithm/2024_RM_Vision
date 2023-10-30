@@ -1,0 +1,5 @@
+/home/steins_xin/clion-2022.3.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/steins_xin/clion-2022.3.1/bin/ninja/linux/ninja -G Ninja -S /home/steins_xin/CLionProjects/RM_Detection/Package/AngleSolve -B /home/steins_xin/CLionProjects/RM_Detection/Package/AngleSolve/cmake-build-debug
+----Debug----
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/steins_xin/CLionProjects/RM_Detection/Package/AngleSolve/cmake-build-debug

@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "HIK_SDK",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "HIK_Camera::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-HIK_Camera-Debug-9612d175c84905756a96.json",
+					"name" : "HIK_Camera",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "HIK_SDK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-HIK_SDK-Debug-6fa6c4dcc5b918294554.json",
+					"name" : "HIK_SDK",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/steins_xin/CLionProjects/RM_Detection/Package/HIK_Camera/cmake-build-debug",
+		"source" : "/home/steins_xin/CLionProjects/RM_Detection/Package/HIK_Camera"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Armor_Detection",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Armor_Detection::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Armor_Detection-Debug-570cc90f74c3b3aba387.json",
+					"name" : "Armor_Detection",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Armor_Detection_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Armor_Detection_test-Debug-daaea38c3d0617ceba96.json",
+					"name" : "Armor_Detection_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/steins_xin/CLionProjects/RM_Detection/Package/Armor_Detection/cmake-build-debug",
+		"source" : "/home/steins_xin/CLionProjects/RM_Detection/Package/Armor_Detection"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

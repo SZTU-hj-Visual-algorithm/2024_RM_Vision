@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Armor_Observe",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Armor_Observe::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Armor_Observe-Debug-c0e0f1036ba3682bcbcd.json",
+					"name" : "Armor_Observe",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Armor_Observe_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Armor_Observe_test-Debug-80ccdee65f1559cd025d.json",
+					"name" : "Armor_Observe_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/steins_xin/CLionProjects/RM_Detection/Package/Armor_Observe/cmake-build-debug",
+		"source" : "/home/steins_xin/CLionProjects/RM_Detection/Package/Armor_Observe"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
