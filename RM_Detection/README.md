@@ -8,9 +8,9 @@ RM_Detection
 
 ```c++
 .
-├── Dynamic_library			// 放置编译之后的动态库
+├── Dynamic_library			 // 放置编译之后的动态库
 │   └── include				  // 功能包头文件
-│       └── HIK_Camera_H				  // 相机头文件    
+│       └── HIK_Camera_H				// 相机头文件    
 │ 
 ├── images				  // 测试资料
 ├── include				  // 公共头文件(功能包都会调用)
