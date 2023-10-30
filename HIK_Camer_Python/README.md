@@ -1,0 +1,5 @@
+HIK_Camera_Python
+
+海康工业相机Python版本驱动
+
+所需环境在requirements.txt下有标注
