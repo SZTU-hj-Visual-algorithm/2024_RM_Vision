@@ -10,7 +10,7 @@ RM_Detection
 .
 ├── Dynamic_library			  // 放置编译之后的动态库
 │   └── include				  // 功能包头文件
-│       └── HIK_Camera_H		 // 相机头文件    
+│       └── HIK_Camera_H		  // 相机头文件    
 │ 
 ├── images				  // 测试资料
 ├── include				  // 公共头文件(功能包都会调用)
@@ -39,7 +39,7 @@ RM_Detection
 │   │   ├── MD_Camera
 │   │   │   └── camera
 │   │   └── src
-│   └── Thread				  // 多线程
+│   └── Thread				      // 多线程
 │       ├── include
 │       └── src
 └── SetParam_File				  // 功能包参数文件
