@@ -9,8 +9,8 @@ RM_Detection
 ```c++
 .
 ├── Dynamic_library				  // 放置编译之后的动态库
-│   └── include					    // 功能包头文件
-│       └── HIK_Camera_H	  // 相机头文件    
+│   └── include				  // 功能包头文件
+│       └── HIK_Camera_H				  // 相机头文件    
 │ 
 ├── images				  // 测试资料
 ├── include				  // 公共头文件(功能包都会调用)
@@ -20,10 +20,10 @@ RM_Detection
 │   ├── AngleSolve				  // 坐标系转换
 │   │   ├── include
 │   │   └── src
-│   ├── Armor_Detection			// 装甲板识别
+│   ├── Armor_Detection				  // 装甲板识别
 │   │   ├── include
 │   │   └── src
-│   ├── Armor_Observe			  // 整车观测
+│   ├── Armor_Observe				  // 整车观测
 │   │   ├── include
 │   │   └── src
 │   ├── Armor_Track				  // 装甲板跟踪及反陀螺
@@ -39,7 +39,7 @@ RM_Detection
 │   │   ├── MD_Camera
 │   │   │   └── camera
 │   │   └── src
-│   └── Thread					  // 多线程
+│   └── Thread				  // 多线程
 │       ├── include
 │       └── src
 └── SetParam_File				  // 功能包参数文件
