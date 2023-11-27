@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC   -shared -Wl,-soname,libMD_Camera.so -o /home/steins_xin/CLionProjects/RM_Detection_install/Dynamic_library/libMD_Camera.so CMakeFiles/MD_Camera.dir/src/MD_Camera.cpp.o 

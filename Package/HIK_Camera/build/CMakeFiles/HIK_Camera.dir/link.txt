@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -pthread  -shared -Wl,-soname,libHIK_Camera.so -o /home/steins_xin/CLionProjects/RM_Detection_install/Dynamic_library/libHIK_Camera.so CMakeFiles/HIK_Camera.dir/src/HIK_Camera.cpp.o 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC   -shared -Wl,-soname,libAngleSolve.so -o /home/steins_xin/CLionProjects/RM_Detection_install/Dynamic_library/libAngleSolve.so CMakeFiles/AngleSolve.dir/src/AngleSolve.cpp.o 
