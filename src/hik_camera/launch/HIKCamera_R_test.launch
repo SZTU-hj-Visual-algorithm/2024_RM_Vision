@@ -1,0 +1,18 @@
+<launch>
+    <node
+        name="HIK_Camera_R"
+        pkg="HIK_Camera"
+        type="HIK_Camera_R_node"
+        respawn="true"  
+        >
+    </node>
+
+    <node
+        name="Receive_R_test"
+        pkg="HIK_Camera"
+        type="HIK_Camera_R_Receive_test_node"
+        output="screen"
+        respawn="true"   
+        >
+    </node>
+</launch>

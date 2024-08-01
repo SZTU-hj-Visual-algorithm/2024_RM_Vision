@@ -1,0 +1,1 @@
+sudo cp usb_camera.rules /etc/udev/rules.d/

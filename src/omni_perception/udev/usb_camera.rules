@@ -1,0 +1,7 @@
+KERNEL=="video*", SUBSYSTEM=="video4linux",ATTR{index}=="0", ATTRS{idVendor}=="15aa", ATTRS{idProduct}=="1111", MODE:="0777", SYMLINK+="usb_camera_1"
+
+KERNEL=="video*", SUBSYSTEM=="video4linux",ATTR{index}=="0", ATTRS{idVendor}=="15aa", ATTRS{idProduct}=="2222", MODE:="0777", SYMLINK+="usb_camera_2"
+
+KERNEL=="video*", SUBSYSTEM=="video4linux",ATTR{index}=="0", ATTRS{idVendor}=="15aa", ATTRS{idProduct}=="3333", MODE:="0777", SYMLINK+="usb_camera_3"
+
+KERNEL=="video*", SUBSYSTEM=="video4linux",ATTR{index}=="0", ATTRS{idVendor}=="15aa", ATTRS{idProduct}=="4444", MODE:="0777", SYMLINK+="usb_camera_4"

@@ -1,0 +1,2 @@
+communication:hik_camera:omni_perception:robot_detection:robot_msgs:serial_device
+-DCATKIN_DEVEL_PREFIX=/home/steins_xin/RM_Detection_Sentinel_ROS/devel -DCMAKE_INSTALL_PREFIX=/home/steins_xin/RM_Detection_Sentinel_ROS/install -G Unix Makefiles

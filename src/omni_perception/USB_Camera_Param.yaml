@@ -1,0 +1,14 @@
+%YAML:1.0
+---
+# 相机参数
+ExposureTime: 5000.00   #曝光时间
+Gain: 150.0             #增益
+FPS: 60                 #帧率
+width: 1440             #图像宽
+height: 1080            #图像高
+AUTO_WB: 1              #白平衡
+# 相机名称
+Camera_O: /dev/usb_camera_1
+Camera_F: /dev/usb_camera_2
+Camera_R: /dev/usb_camera_3
+Camera_L: /dev/usb_camera_4

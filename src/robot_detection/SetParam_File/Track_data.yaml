@@ -1,0 +1,16 @@
+%YAML:1.0
+---
+# 跟踪阈值
+find_threshold: 5
+lost_threshold: 20
+new_old_threshold: 0.2
+switch_armor_threshold: 5
+# 陀螺参数
+spin_max_r_multiple: 5
+spin_judge_low_threshold: 1500
+spin_judge_high_threshold: 20000
+max_delta_t: 120
+max_history_len: 30
+# 决策开火框
+wide_ratio: 0.7
+high_ratio: 0.7

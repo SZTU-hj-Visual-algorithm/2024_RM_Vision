@@ -1,0 +1,51 @@
+description: Ultralytics YOLOv8n-pose model trained on coco8-pose.yaml
+author: Ultralytics
+license: AGPL-3.0 https://ultralytics.com/license
+date: '2023-12-20T19:01:36.898189'
+version: 8.0.218
+stride: 32
+task: pose
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: BG
+  1: B1
+  2: B2
+  3: B3
+  4: B4
+  5: B5
+  6: BO
+  7: BBs
+  8: BBb
+  9: RG
+  10: R1
+  11: R2
+  12: R3
+  13: R4
+  14: R5
+  15: RO
+  16: RBs
+  17: RBb
+  18: NG
+  19: N1
+  20: N2
+  21: N3
+  22: N4
+  23: N5
+  24: 'False'
+  25: NBs
+  26: NBb
+  27: PG
+  28: P1
+  29: P2
+  30: P3
+  31: P4
+  32: P5
+  33: PO
+  34: PBs
+  35: PBb
+kpt_shape:
+- 5
+- 2

@@ -1,0 +1,18 @@
+<launch>
+    <node
+        name="Serial_Device_R"
+        pkg="Serial_Device"
+        type="Serial_Device_Send_R_node"
+        respawn="true"  
+        >
+    </node>
+
+    <node
+        name="Serial_Device_Receive_R_test"
+        pkg="Serial_Device"
+        type="Serial_Device_Receive_test_R_node"
+        output="screen"
+        respawn="true"   
+        >
+    </node>
+</launch>
