@@ -1,0 +1,2 @@
+KERNEL=="ttyACM*", ATTRS{serial}=="208532674D31", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", MODE:="0777",GROUP:="dialout",  SYMLINK+="Steins_Xin_L"
+KERNEL=="ttyACM*", ATTRS{serial}=="2082377E5948", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", MODE:="0777",GROUP:="dialout",  SYMLINK+="Steins_Xin_R"

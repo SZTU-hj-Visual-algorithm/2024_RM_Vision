@@ -1,0 +1,88 @@
+<!-- 右云台启动文件 -->
+<launch>
+    <node
+        name="HIK_Camera_R"
+        pkg="hik_camera"
+        type="hik_camera_R_node"
+        respawn="true"  
+        >
+    </node>
+
+    <!-- 串口读取数据 | 暂时不需要 -->
+    <!-- <node
+        name="Serial_Device_Send"
+        pkg="Serial_Device"
+        type="Serial_Device_Send_node"
+        output="screen"
+        respawn="true"   
+        >
+    </node>
+
+    <node
+        name="Serial_Device_Receive"
+        pkg="Serial_Device"
+        type="Serial_Device_Receive_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node> -->
+
+    <!-- 自瞄部分 -->
+    <!-- <node
+        name="Robot_Detection_L"
+        pkg="robot_detection"
+        type="robot_detection_L_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node> -->
+
+    <node
+        name="Robot_Detection_R"
+        pkg="robot_detection"
+        type="robot_detection_R_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node>
+
+    <!-- 左右云台数据融合部分 -->
+    <!-- <node
+        name="PTZ_perception_L"
+        pkg="communication"
+        type="communication_PTZ_perception_L_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node> -->
+
+    <node
+        name="PTZ_perception_R"
+        pkg="communication"
+        type="communication_PTZ_perception_R_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node>
+
+    <!-- 总决策部分 -->
+    <!-- <node
+        name="PTZ_Yaw"
+        pkg="communication"
+        type="communication_PTZ_Yaw_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node> -->
+
+    <!-- 云台数据模拟测试部分 -->
+    <!-- <node
+        name="PTZ_Test"
+        pkg="communication"
+        type="communication_Test_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node> -->
+
+</launch>

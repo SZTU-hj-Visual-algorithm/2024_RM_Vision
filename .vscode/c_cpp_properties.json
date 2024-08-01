@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/hik_camera/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/public_include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/serial_device/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/robot_detection/src/AngleSolve/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/robot_detection/src/Armor_Detection/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/robot_detection/src/Armor_Observe/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/robot_detection/src/Armor_Track/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/communication/include/**",
+        "/home/steins_xin/RM_Detection_Sentinel_ROS/src/communication/Kalman/**",
+        "/home/steins_xin/catkin_ws/src/cv_bridge/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
