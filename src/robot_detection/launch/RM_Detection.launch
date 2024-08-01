@@ -1,0 +1,36 @@
+<launch>
+    <node
+        name="HIK_Camera"
+        pkg="hik_camera"
+        type="hik_camera_node"
+        respawn="true"  
+        >
+    </node>
+
+    <node
+        name="Serial_Device_Send"
+        pkg="serial_device"
+        type="serial_device_send_node"
+        output="screen"
+        respawn="true"   
+        >
+    </node>
+
+    <node
+        name="Serial_Device_Receive"
+        pkg="serial_device"
+        type="serial_device_receive_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node>
+
+    <node
+        name="robot_detection"
+        pkg="robot_detection"
+        type="robot_detection_node"
+        output="screen"
+        respawn="true"  
+        >
+    </node>
+</launch>
