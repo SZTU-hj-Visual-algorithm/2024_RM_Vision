@@ -1,0 +1,72 @@
+%YAML:1.0
+---
+########################### 图像处理部分 ############################
+##   blue - red
+br_blue_threshold: 170
+br_red_threshold: 254
+
+##  red - blue
+#night
+rb_red_threshold: 170
+rb_blue_threshold: 254
+
+  
+########################### 矩形筛选部分 ############################
+r_max_area : 1000
+r_min_area : 50
+
+leaf_max_area : 15000   # 6-7  13000  和 8 9 m 5000
+leaf_min_area : 4700   
+  
+
+########################### R标筛选信息 ############################
+
+r_min_hb_ratio : 0.40
+r_max_hb_ratio : 0.83
+
+r_min_hw_ratio : 0.6       # 3/26
+r_max_hw_ratio : 1.15
+
+r_max_are_ratio : 0.95      # 3/26  最大不超0.9
+
+r_min_are_ratio : 0.56       #最小不低于 0.75
+
+ 
+
+########################### leaf筛选信息 ############################
+leaf_min_hw_ratio : 0.47     # 6-7  0.51   和 8 9 m 一样
+leaf_max_hw_ratio : 0.63
+
+leaf_r_max_distance : 170   #计算过 6-7m
+leaf_r_min_distance : 70    # 8-9 m
+ 
+ 
+#################  预测   ################
+
+SMALL_Pre_Angle_Gain : 30.1
+ 
+DELAY_TIME_ : -0.45
+ 
+
+R_ReInited_flag : 1500   # 多久更新识别R?
+
+########################### 不重要 ############################
+R_classifier_confidence : 0.75
+
+leaf_classifier_confidence : 90
+recording_buff_area_ratio : 500
+
+########################### 路径 ############################
+ 
+
+# 分类模型
+LeafModelPath : "/home/hj/RM_Detection_ROS/src/Model/LeNet_Leaf_Best_v2.onnx"
+HandleModelPath : "/home/hj/RM_Detection_ROS/src/Model/LeNet_Handle_Best_v2.onnx"
+RModelPath : "/home/hj/RM_Detection_ROS/src/Model/LeNet_R_v3.onnx"
+
+#保存图片地址路径
+image_write_PATH : "/home/hj/buff/images/"
+ 
+
+
+ 

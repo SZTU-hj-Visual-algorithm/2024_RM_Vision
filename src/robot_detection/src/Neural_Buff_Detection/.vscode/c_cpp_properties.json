@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/hj/RM_Detection_ROS/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/hj/RM_Detection_ROS/src/hik_camera/include/**",
+        "/home/hj/RM_Detection_ROS/src/robot_detection/include/**",
+        "/home/hj/RM_Detection_ROS/src/serial_device/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
