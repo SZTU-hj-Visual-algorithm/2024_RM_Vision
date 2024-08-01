@@ -1,0 +1,13 @@
+%YAML:1.0
+---
+detectClassStartIndex: 0 # 
+detectRange: 27 # 模型识别的class范围,一般是9的倍数
+detectPointIndex: 31 # 模型输出解析kpt的索引,它的值 = 模型的输出 + 4, 旧版模型是36,新版模型是27,所以值要么是40,要么是31
+confThreshold: 0.75 # 筛选的置信度
+nmsThreshold: 0.30 # 进行NMS时使用的阈值
+scoreThreshold: 0.75 # NMS时使用的置信度
+
+#模型缓存路径 
+model_cache: /home/hj/RM_Detection_ROS/src/Model/cache 
+# openvino优化后的模型IR文件路径,后缀是xml
+onnx_path: /home/hj/RM_Detection_ROS/src/Model/epz165-bz32-SOTA-additionData/weights/best_openvino_model_fp16/best.xml
