@@ -1,0 +1,6 @@
+%YAML:1.0
+---
+#onnx模型路径
+net_path: /home/hj/RM_Detection_ROS/src/Model/2023_4_9_hj_num_1.onnx
+input_width: 22     #网络输入图片宽度
+input_height: 30    #网络输入图片高度
