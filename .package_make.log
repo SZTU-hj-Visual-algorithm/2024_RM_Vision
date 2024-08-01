@@ -1,0 +1,6 @@
+Scanning dependencies of target Armor_Track
+[ 25%] Building CXX object CMakeFiles/Armor_Track.dir/src/Armor_Track.cpp.o
+[ 50%] Building CXX object CMakeFiles/Armor_Track.dir/src/Kalman.cpp.o
+[ 75%] Building CXX object CMakeFiles/Armor_Track.dir/src/SpinTracker.cpp.o
+[100%] Linking CXX shared library /home/hj/RM_Detection/Dynamic_library/libArmor_Track.so
+[100%] Built target Armor_Track
