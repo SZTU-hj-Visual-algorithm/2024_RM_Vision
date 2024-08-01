@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/steins_xin/vision_2023/devel/include/**",
+        "/home/steins_xin/ROS/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/steins_xin/ROS/src/Demo/include/**",
+        "/home/steins_xin/catkin_ws/src/cv_bridge/include/**",
+        "/home/steins_xin/vision_2023/src/fdilink_ahrs/include/**",
+        "/home/steins_xin/ROS_test/src/img_test/include/**",
+        "/home/steins_xin/ROS/src/opencv/include/**",
+        "/home/steins_xin/vision_2023/src/simple_robot/include/**",
+        "/home/steins_xin/ROS/src/test/include/**",
+        "/home/steins_xin/ROS/src/vision/include/**",
+        "/home/steins_xin/ROS/src/vision_2023/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

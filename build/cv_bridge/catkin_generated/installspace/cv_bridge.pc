@@ -1,0 +1,8 @@
+prefix=/home/steins_xin/catkin_ws/install
+
+Name: cv_bridge
+Description: Description of cv_bridge
+Version: 1.13.0
+Cflags: -I${prefix}/include -I/usr/local/include/opencv4
+Libs: -L${prefix}/lib -lcv_bridge /usr/local/lib/libopencv_core.so.4.5.5 /usr/local/lib/libopencv_imgproc.so.4.5.5 /usr/local/lib/libopencv_imgcodecs.so.4.5.5
+Requires: rosconsole sensor_msgs
