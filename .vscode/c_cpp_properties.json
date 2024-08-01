@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/steins_xin/RM_Detection_ROS/devel/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/public_include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/HIK_Camera/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/Serial_Device/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/src/AngleSolve/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/src/Armor_Detection/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/src/Armor_Observe/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/src/Armor_Track/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/src/Neural_Armor_Detection/include/**",
+        "/home/steins_xin/RM_Detection_ROS/src/robot_detection/src/Outpost_Observe/include/**",
+        "/home/steins_xin/catkin_ws/src/cv_bridge/include/**",
+        "/usr/include/**",
+        "/opt/intel/openvino/runtime/include",
+        "/opt/intel/openvino/runtime/include/ie",
+        "/opt/intel/openvino/runtime/include/ngraph"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
