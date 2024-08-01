@@ -1,4 +1,8 @@
-# BUFF 能量机关激活
+# BUFF 能量机关
+
+## 项目目录结构
+
+```tree
 .
 ├── CMakeLists.txt -> /opt/ros/noetic/share/catkin/cmake/toplevel.cmake
 ├── hik_camera
@@ -165,5 +169,36 @@
     └── udev
         ├── robomaster_usb.rules
         └── rule_setup.sh
+```
 
+功能包简介：
 
+serial_device：串口通信功能包
+
+robot_msgs：ROS自定义消息包
+
+hik_camera：海康相机功能包
+
+Model：模型集合包 (onnx模型)
+
+public_include:：公共头文件包
+
+robot_detection => SetParam_File：配置文件
+
+robot_detection => AngleSolve：坐标系转换功能包
+
+robot_detection => Armor_Detection：装甲板识别功能包
+
+robot_detection => Armor_Track：装甲板跟踪功能包
+
+robot_detection => Armor_Observe：整车观测功能包
+
+robot_detection => Buff_Detection：能量机关识别功能包
+
+robot_detection => Buff_Prediction：能量机关预测功能包
+
+robot_detection => Neural_Armor_Detection：装甲板深度学习识别功能包 
+
+robot_detection => Neural_Buff_Detection：能量机关深度学习识别功能包
+
+robot_detection =>  Outpost_Observe：反前哨站功能包
