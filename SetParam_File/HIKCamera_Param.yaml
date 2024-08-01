@@ -1,0 +1,13 @@
+%YAML:1.0
+---
+# 相机参数
+# ExposureTime: 6000.00  #曝光时间
+ExposureTime: 4000.00  #曝光时间
+Gain: 15.0              #增益
+# 白平衡参数
+BalanceRatio_R: 1314   # R通道
+BalanceRatio_G: 1024   # G通道
+BalanceRatio_B: 2800   # B通道
+# 录像参数
+Video_FPS: 60
+Video_path: /home/hj/RM_Detection/Dynamic_library/Video/HIK_Camera.avi
