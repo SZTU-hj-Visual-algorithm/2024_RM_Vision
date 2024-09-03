@@ -3,9 +3,78 @@
 
 
 
+
 ### 文件介绍
 ---
-**Buff_Dubug.cpp**
+
+*主要配置文件*
+```tree
+├── SetParam_File
+│   ├── Buff_data.yaml
+│   ├── Detect_data.yaml
+│   ├── Dnn_data.yaml
+│   ├── HIKCamera_Param.yaml
+│   ├── Kalman_data.yaml
+│   ├── Neural_Detect_data.yaml
+│   ├── Observe_data.yaml
+│   ├── Solve_data.yaml
+│   └── Track_data.yaml
+```
+
+
+*主要文件*
+
+```tree
+├── Buff_Detection
+│   ├── buff_logs
+│   ├── include
+│   │   ├── BuffDetection.h
+│   │   └── Logger.h
+│   └── src
+│       └── Buff_Detection.cpp
+├── Buff_Prediction
+│   ├── include
+│   │   └── BuffPrediction.h
+│   └── src
+│       └── Buff_Prediction.cpp
+```
+
+功能包简介：
+
+serial_device：串口通信功能包
+
+robot_msgs：ROS自定义消息包
+
+hik_camera：海康相机功能包
+
+Model：模型集合包 (onnx模型)
+
+public_include:：公共头文件包
+
+robot_detection => SetParam_File：配置文件
+
+robot_detection => AngleSolve：坐标系转换功能包
+
+robot_detection => Armor_Detection：装甲板识别功能包
+
+robot_detection => Armor_Track：装甲板跟踪功能包
+
+robot_detection => Armor_Observe：整车观测功能包
+
+robot_detection => Buff_Detection：能量机关识别功能包
+
+robot_detection => Buff_Prediction：能量机关预测功能包
+
+robot_detection => Neural_Armor_Detection：装甲板深度学习识别功能包 
+
+robot_detection => Neural_Buff_Detection：能量机关深度学习识别功能包
+
+robot_detection =>  Outpost_Observe：反前哨站功能包
+
+
+---
+### Buff_Dubug.cpp 
+
 这个文件主要是赛前快速调参、场上快速调参。
 在文件中，我将主要的参数提取出，并应用OpenCV滑动条的方法，修改参数。
 >值得注意的是这样方法，只能修改整型数据，浮点数还得自行/1000(自己根据大小缩放)
