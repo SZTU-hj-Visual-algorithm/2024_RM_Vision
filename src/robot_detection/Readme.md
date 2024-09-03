@@ -336,21 +336,191 @@ if __name__ == "__main__":
 
 <img src="https://github.com/user-attachments/assets/19ec96aa-c528-41d8-9da8-f4de84345235"  style="width: 50% ;height:50%; margin: auto; display: block;" />
  
-*true*
+*trueLeaf*
 
 <img src="https://github.com/user-attachments/assets/62694466-9d63-4d23-9241-af435492cefd"  style="width: 50% ;height:50%; margin: auto; display: block;" />
 
-*false*
+*falseLeaf*
 
 <img src="https://github.com/user-attachments/assets/a16ed089-c4d7-44e8-8ac7-3af0938c09aa"  style="width: 50% ;height:50%; margin: auto; display: block;" />
 
-*false1*
+*falseLeaf1*
 
 <img src="https://github.com/user-attachments/assets/45293255-30f9-4dbe-8c00-5b396408245d"  style="width: 50% ;height:50%; margin: auto; display: block;" />
- 
+
+#### 识别流程
+* 1、传统算法筛选出物理信息符合的初目标
+* 2、固定目标旋转矩形的坐标点（避免在旋转的时候改变），方便放射变换
+* 3、取Leaf一半，目标部分ROI进行放射变换，得到仿射变换图像 进入推理程序分类器
+* 4、得到目标，储存信息
+* 5、**识别到两个以上目标，进行再一次分类识别，使用LeNet_Handle_Best_v2.onnx模型杀手锏**
+
+---
+*根据角度固定旋转矩形坐标*
+~~~c++
+ if (leaf_.angle >= 0 && leaf_.angle < 91 || leaf_.angle >= 353 && leaf_.angle <= 360) {
+            leaf_target[0] = Vertex[0];
+            leaf_target[1] = Vertex[1];
+            leaf_target[2] = Vertex[2];
+            leaf_target[3] = Vertex[3];
+
+        } else if (leaf_.angle >= 91 && leaf_.angle < 181) {
+            leaf_target[0] = Vertex[3];
+            leaf_target[1] = Vertex[0];
+            leaf_target[2] = Vertex[1];
+            leaf_target[3] = Vertex[2];
+
+        } else if (leaf_.angle >= 181 && leaf_.angle < 266) {
+            leaf_target[0] = Vertex[2];
+            leaf_target[1] = Vertex[3];
+            leaf_target[2] = Vertex[0];
+            leaf_target[3] = Vertex[1];
+
+        } else {
+            leaf_target[0] = Vertex[1];
+            leaf_target[1] = Vertex[2];
+            leaf_target[2] = Vertex[3];
+            leaf_target[3] = Vertex[0];
+        }
+~~~
 
 
+*分类器（模型推理）*
+~~~c++
+bool BuffDetection::classifier(cv::Mat &src  , size_t id, std::string&ModePath) {
+    double confidence;
+    size_t classId;
+    // 加载ONNX模型
  
- 
+    cv::dnn::Net net = cv::dnn::readNetFromONNX(ModePath);
 
+    // 将图像转换为blob
+    cv::Mat blob = cv::dnn::blobFromImage(src, 1.0, cv::Size(30, 30), cv::Scalar(), true, false);
+
+    // 设置网络的输入
+    net.setInput(blob);
+
+    // 进行前向传播以获取输出
+    cv::Mat prob = net.forward();
+
+    // 找到概率最高的类别
+    cv::Point classIdPoint;
+    minMaxLoc(prob.reshape(1, 1), nullptr, &confidence, nullptr, &classIdPoint);
+
+    classId = classIdPoint.x;
+
+    if (classId == id && confidence * 100 > leaf_classifier_confidence) {
+        blob.release();
+        prob.release();
+        return true;
+    } else {
+
+        blob.release();
+        prob.release();
+        return false;
+    }
+}
+~~~
+
+
+---
+# 预测
+>简单讲述一下预测思路
+
+### 小符
+
+因为均速，可以调节SMALL_Pre_Angle_Gain预测角度增益，击打。
+无脑解算预测点位置。
+
+### 大符
+
+涉及离散傅里叶变换求取三角函数信息，实现不断采样、不断拟合的过程。
+
+~~~c++
+void BuffPrediction::calculateRotateSpeed(BuffTarget &buffTargetPrediction)
+{
+    //定义静态过去和现在角度；
+    static double nowAngle = 0.0f;
+    static double lastAngle = 0.0f;
+    static int count = 0;
+    //定义过去和现在时间
+    static double lastTime = (double) cv::getTickCount() / cv::getTickFrequency() * 1000; // ms
+    double curTime = (double) cv::getTickCount() / cv::getTickFrequency() * 1000;
+//    double curTime_ = (double) cv::getTickCount() /  cv::getTickFrequency()*1000.0  ;
+//    std::cout<<curTime_<<std::endl;
+    //如果叶片没有跳变，则把过去和现在角度以及过去和现在速度置零
+//        std::cout<<leaf_.angle<<std::endl;
+    if (!_sameLeaf) {
+        lastAngle = nowAngle = _rotateSpeed.lastRotateSpeed = _rotateSpeed.nowRotateSpeed = 0.0f;
+        return;
+    }
+
+    //如果过去角度已经被清零，则过去角度进行初始化为现在绝对角度
+    if (lastAngle == 0.0f) {
+        lastAngle = buffTargetPrediction.leaf_angle;
+        return;
+    }
+
+    //每0.1s一次数据刷新
+    if (curTime - lastTime < 100 ) {
+        return;
+    }
+    //帧数递增
+    count++;
+    nowAngle = buffTargetPrediction.leaf_angle;
+    //计算实时角速度
+    _rotateSpeed.nowRotateSpeed = (float) fabs( angleToRadian((nowAngle - lastAngle)) * (1000.0f / (curTime - lastTime)));
+
+
+    //过去角度和时间更新
+    lastAngle = nowAngle;
+    lastTime = curTime;
+    //如果过去角速度已被清零，则对过去速度进行更新
+    if (_rotateSpeed.lastRotateSpeed == 0.0f) {
+        _rotateSpeed.lastRotateSpeed = _rotateSpeed.nowRotateSpeed;
+        return;
+    }
+    //防止出现异常数据
+    if (_rotateSpeed.nowRotateSpeed > 5 || _rotateSpeed.nowRotateSpeed < -5) {
+        return;
+    }
+
+    //如果速度没有替换最小速度，则计数加1
+    if (_speedRange.nowMinSpeed > _rotateSpeed.nowRotateSpeed) {
+        _speedRange.nowMinSpeed = _rotateSpeed.nowRotateSpeed;
+    } else {
+        _speedRange.minSameNumber++;
+    }
+    //如果速度没有替换最大速度，则计数加1
+    if (_speedRange.nowMaxSpeed < _rotateSpeed.nowRotateSpeed) {
+        _speedRange.nowMaxSpeed = _rotateSpeed.nowRotateSpeed;
+    } else {
+        _speedRange.maxSameNumber++;
+    }
+    //如果连续20帧没有刷新最小速度，则该速度为波谷速度（该速度一旦更新，便不再更新）
+    if (_speedRange.minSameNumber > 30 && !_speedRange.minSpeedFlag) {
+        _speedRange.realMinSpeed = _speedRange.nowMinSpeed;
+        _speedRange.minSpeedFlag = true;
+    }
+    //如果连续20帧没有刷新最大速度，则该速度为波峰速度（该速度一旦更新，便不再更新）
+    if (_speedRange.maxSameNumber > 30 && !_speedRange.maxSpeedFlag) {
+        _speedRange.realMaxSpeed = _speedRange.nowMaxSpeed;
+        _speedRange.maxSpeedFlag = true;
+    }
+
+    _rotateSpeed.realRotateSpeed = _rotateSpeed.nowRotateSpeed;
+
+    //赋予开火结构体现在的预测角度
+    fire.GetNowSpeed = _rotateSpeed.realRotateSpeed;
+}
+~~~
+
+**这部分主要是平滑数据作用，可以换成卡尔曼滤波平滑。**
+
+
+
+~~~c++
+void BuffPrediction::OpenFire().....
+~~~
   
+**这部分本来是解决自动开火的，发现没什么必要。搁置了**
