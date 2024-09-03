@@ -327,9 +327,30 @@ if __name__ == "__main__":
 ~~~
 
 **数据集**
-falseHandle
 
-<img src="https://github.com/user-attachments/assets/f07e7d59-2059-49ec-9be8-a36ae1ab3161"  style="width: 30%; margin: auto; display: block;" />
+*falseHandle*
+
+<img src="https://github.com/user-attachments/assets/f07e7d59-2059-49ec-9be8-a36ae1ab3161"  style="width: 50% ;height:50%; margin: auto; display: block;" />
+
+*trueHanle*
+
+<img src="https://github.com/user-attachments/assets/19ec96aa-c528-41d8-9da8-f4de84345235"  style="width: 50% ;height:50%; margin: auto; display: block;" />
+ 
+*true*
+
+<img src="https://github.com/user-attachments/assets/62694466-9d63-4d23-9241-af435492cefd"  style="width: 50% ;height:50%; margin: auto; display: block;" />
+
+*false*
+
+<img src="https://github.com/user-attachments/assets/a16ed089-c4d7-44e8-8ac7-3af0938c09aa"  style="width: 50% ;height:50%; margin: auto; display: block;" />
+
+*false1*
+
+<img src="https://github.com/user-attachments/assets/45293255-30f9-4dbe-8c00-5b396408245d"  style="width: 50% ;height:50%; margin: auto; display: block;" />
+ 
+
+
+ 
  
 
   
