@@ -503,6 +503,7 @@ bool BuffDetection::classifier(cv::Mat &src  , size_t id, std::string&ModePath) 
 ### 大符
 
 涉及离散傅里叶变换求取三角函数信息，实现不断采样、不断拟合的过程。
+**理论部分自己学习**
 
 ~~~c++
 void BuffPrediction::calculateRotateSpeed(BuffTarget &buffTargetPrediction)
