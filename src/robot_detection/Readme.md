@@ -142,7 +142,7 @@ if (Vision_data.mode == 0x23 || Vision_data.mode == 0x22)
 
 ---
 # 识别逻辑
----
+
 >下面我会分别讲述对R标识别和Leaf_target的识别
 
 ### **R标识别逻辑**
@@ -154,7 +154,182 @@ if (Vision_data.mode == 0x23 || Vision_data.mode == 0x22)
 
 **补充**
 海康相机中心与图传中心 不是一样的。需要额外绘制一个图像中心点
-![image](https://github.com/user-attachments/assets/02e50b4b-ce7c-4ab4-b4f7-c61ccb5c7d16)
+<img src="https://github.com/user-attachments/assets/02e50b4b-ce7c-4ab4-b4f7-c61ccb5c7d16"  style="width: 70%; margin: auto; display: block;" />
 
-  
+ 
+**识别逻辑**
+* 1、先传统识别一下R（物理信息）
+* 2、如果识别到的R标，距离中心很近（范围内）就可以确定这是R标
+* 3、得到这个R标，先获取到其三维坐标系下的三维坐标并储存
+* 4、不用进入传统识别程序内，进入坐标转换程序内：不断获取三维坐标转图像坐标。此时这个图像坐标就是R标位置。（**ps：如果不更新三维坐标的话，三维坐标会漂移进而导致映射到图像上坐标也会漂移。因此需要更新**）
+* 5、更新：设置更新时间，如果进入更新模式，那么距离上一帧R坐标最近那个目标坐标就是当前R标的实际坐标。更新三维坐标
+* 6、闭环完成
+
+**R标的重要性**
+R标的位置，可以帮助我们通过角度、半径计算目标预测点位置。
+
+---
+### **Leaf_Target识别流程**
+
+> 击打目标图案，可以使用简化识别实现。
+
+当时识别方案
+* 深度学习大模型     （耗时太大）
+* 传统     （会面临鲁棒性差的问题。视频跑的好但是实际测试会面临各种曝光问题，会导致的灯条粘连，从而影响识别的思路）
+* 传统 + 神经网络小模型 （速度快，且图案就那几个，鲁棒性可以）
+
+**神经网络模型**
+
+*调参是艺术活*
+~~~python
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision.transforms as transforms
+from matplotlib import pyplot as plt
+from torchvision.datasets import ImageFolder
+from torch.utils.data import DataLoader
+import torch.onnx
+from tqdm import tqdm
+from tool.Matplot_Tool import plot_data
+from tool.Train_Tool import train_model, SaveModel, EarlyStopping
+from tool.Train_Tool import evaluate_model
+
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.nn.utils import clip_grad_norm_
+
+# 数据转换和加载
+transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1) ,
+    # transforms.RandomHorizontalFlip(),
+    # transforms.RandomVerticalFlip(),
+    # transforms.RandomRotation(10),
+    transforms.ToTensor(),
+ ])
+test_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.ToTensor()
+
+
+])
+# 数据集的根目录包含两个子文件夹，每个子文件夹对应一个类别
+train_dataset = ImageFolder(root='HandleDatasets/train', transform=transform)
+test_dataset = ImageFolder(root='HandleDatasets/test', transform=test_transform)
+
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+
+
+class SimpleLeNet5(nn.Module):
+    def __init__(self, num_classes):
+        super(SimpleLeNet5, self).__init__()
+        self.conv1 = nn.Conv2d(1, 6, kernel_size=2)
+
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv2 = nn.Conv2d(6, 12, kernel_size=2)
+
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(12 * 6 * 6, 256)   #432个参数
+        self.dropout= nn.Dropout(0.5)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, num_classes)
+
+
+    def forward(self, x):
+        # print(x.shape)
+        x = self.pool1(torch.relu(self.conv1(x)))
+        x = self.pool2(torch.relu(self.conv2(x)))
+        # print(x.shape)
+        x = x.view(x.size(0), -1)
+        x = torch.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = torch.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = torch.relu(self.fc3(x))
+        x = self.dropout(x)
+        x = self.fc4(x)
+        return x
+
+def main():
+    # 创建模型并将其移动到GPU上
+    num_classes = 2
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    model = SimpleLeNet5(num_classes=num_classes).to(device)
+    # 实例化一个TensorBoard写入器
+    # writer = SummaryWriter()
+    # 定义损失函数和优化器
+    num_epochs = 100
+    patience = 10  # 设置为你认为合适的值
+
+    learning_rate = 0.005
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    scheduler = CosineAnnealingLR(optimizer, eta_min=0.0001 , T_max=num_epochs)
+
+    # 定义余弦退火学习率调度器
+    # 训练模型
+
+    train_losses, test_losses, train_accs, test_accs = [], [], [], []
+    learning_rates = []
+    best_val_acc = 0.0
+    best_epoch = 0
+    early_stopping = EarlyStopping(patience=10, verbose=True)
+    for epoch in range(num_epochs):
+        progress_bar_train = tqdm(train_loader, desc=f'Train epoch {epoch + 1} / {num_epochs}', mininterval=0.3)
+        train_loss, train_acc = train_model(model, progress_bar_train, criterion, optimizer, device, epoch,
+                                            progress_bar_train)
+        train_losses.append(train_loss)
+        train_accs.append(train_acc)
+
+        progress_bar_val = tqdm(test_loader, desc=f'Val epoch {epoch + 1} / {num_epochs}', mininterval=0.3)
+        test_loss, test_acc = evaluate_model(model, progress_bar_val, criterion, device)
+        test_losses.append(test_loss)
+        test_accs.append(test_acc)
+
+        # 更新学习率
+        scheduler.step()
+        # 记录学习率
+        current_lr = optimizer.param_groups[0]['lr']
+        learning_rates.append(current_lr)
+        # 检查是否发生了过拟合
+        early_stopping(test_loss,model,device)
+        # 如果早停法触发，则提前结束训练
+        if early_stopping.early_stop:
+            # SaveModel(model, device)
+            print("Early stopping")
+            break
+
+        # 打印训练和验证信息
+        print(f'Train - Epoch [{epoch + 1}/{num_epochs}] - Loss: {train_loss:.6f}, Accuracy: {train_acc:.2f}%')
+        print(f'Validation - Epoch [{epoch + 1}/{num_epochs}] - Loss: {test_loss:.6f}, Accuracy: {test_acc:.2f}%')
+
+        # 绘制损失和准确率曲线
+    plot_data(train_losses, test_losses, train_accs, test_accs)
+
+    # 绘制学习率变化图像
+    plt.figure()
+    plt.plot(range(1, len(learning_rates) + 1), learning_rates, label='Learning Rate')
+    plt.xlabel('Epoch')
+    plt.ylabel('Learning Rate')
+    plt.title('Learning Rate Schedule')
+    plt.legend()
+    plt.show()
+    # 导出为ONNX格式（尽量使ONNX文件小于1MB）
+    SaveModel(model , device)
+    # 绘制Loss曲线图
+
+if __name__ == "__main__":
+    main()
+
+~~~
+
+**数据集**
+falseHandle
+
+<img src="https://github.com/user-attachments/assets/f07e7d59-2059-49ec-9be8-a36ae1ab3161"  style="width: 30%; margin: auto; display: block;" />
+ 
+
   
