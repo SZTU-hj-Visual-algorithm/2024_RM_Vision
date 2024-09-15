@@ -71,6 +71,9 @@ BuffDetection::BuffDetection()
     fs.release();
 }
 
+
+
+//TODO:原本想作为初始化使用，但是ROS也可以自动杀死程序并清空对应的内存就可以舍弃。
 void BuffDetection::Detection_Init()
 {
      
@@ -96,20 +99,7 @@ std::vector<BuffTarget> BuffDetection::Detection(cv::Mat &frame_) {
 
 
     SetImage(frame_);
-
-    // if(!download)
-    // {  frameCount++;
-    //     if(frameCount >20)
-    //     {
-    //         download = true;
-    //     }
-    //     std::string filename = "/home/hj/images/" + std::to_string(frameCount) + ".jpg";
-    //     std::string filename2 = "/home/hj/images2/" + std::to_string(frameCount) + ".jpg";
-
-    //     // 保存当前帧为图像文件
-    //     cv::imwrite(filename, frame_);
-    //     cv::imwrite(filename2, binary);
-    // }
+ 
 
     /**
      * @brief 寻找初始轮廓 并将符合条件的轮廓 进入R 与 leaf 的筛选中
@@ -245,7 +235,7 @@ void BuffDetection::findCandidateRect(cv::Mat &images) {
 
 
 
-//************************************************  R标  ************************************************ 
+//************************************************  R标 TODO：下面代码额外的功能开发仓促，没有实现简洁、不具有可观性************************************************ 
         //r标的初筛选
         float r_hw_ratio = rect.size.height / rect.size.width;
         bool r_hw_ratio_ok = (r_hw_ratio > (r_min_hw_ratio) && r_hw_ratio < (r_max_hw_ratio));
@@ -269,11 +259,11 @@ void BuffDetection::findCandidateRect(cv::Mat &images) {
         // FIRST_R_PIXEL= AS.imu2pixel(FIRST_R_WORLD_POS);  //重新覆盖第一次R的转换坐标
         R_Point = AS.imu2pixel(R_world_pos); //获取图像坐标
         // std::cout<<R_world_pos[0]<<" "<<R_world_pos[1]<<" "<<R_world_pos[2]<<std::endl;
-        if(GET_FIRST_R_POS)  //第一次识别到才累加
+        if(GET_FIRST_R_POS)  //第一次识别到 GET_FIRST_R_POS = True 。 然后进入累加程序（计时-->更新R标）
         {
             R_ReInited++;
         }
-        if (R_ReInited > R_ReInited_flag ) 
+        if (R_ReInited > R_ReInited_flag ) //到时间点需要重新更新识别R标（不更新的话，R的三维坐标会漂移），更新R的三维坐标
         {
             R_ReInited = 0;
             RInit = false;
@@ -282,13 +272,13 @@ void BuffDetection::findCandidateRect(cv::Mat &images) {
         }
       }
 
-      if (is_r && r_hw_ratio_ok && !RInit)
+      if (is_r && r_hw_ratio_ok && !RInit)  //RInit 就是需要再一次初始化  !RInit就是没有初始化。：1:程序刚开始没有对R初始化（即没有识别到R）需要识别才能算初始化。 2：更新的时候，R需要重新识别，重新初始化
       { 
-        cv::Point2f image_center = cv::Point2f(images.cols * 0.5, images.rows * 0.5);
+        cv::Point2f image_center = cv::Point2f(images.cols * 0.5, images.rows * 0.5);  // 相机中心对准R标的
         
-        if(RUpdate)
+        if(RUpdate)    //  更新与 第一次识别不一样的。  更新是在上一次R标的位置附近筛选    第一次是在相机中心附近筛选目标R标  TODO：不懂可以看这个BUFF分支Readme文件
         {
-            if(POINT_DIST(rect.center,FIRST_R_PIXEL) < 40)
+            if(POINT_DIST(rect.center,FIRST_R_PIXEL) < 40) // 筛选最近的，并更新三维坐标
             {
                 std::cout<<"Read to Update\n";
                 // cv::circle(src_, rect.center, 20, cv::Scalar(255, 0, 255), 2);
@@ -300,7 +290,7 @@ void BuffDetection::findCandidateRect(cv::Mat &images) {
             }
         }
            
-        if( POINT_DIST(image_center,rect.center) < 40 && First_R_Inited)
+        if( POINT_DIST(image_center,rect.center) < 40 && First_R_Inited)  // 筛选最近的，并更新三维坐标
         {
                  printf("No update\n");
                  R_candidateRect_ = candidateRect_Buff(area, rect, Vertex);
@@ -321,7 +311,7 @@ void BuffDetection::findCandidateRect(cv::Mat &images) {
 //************************************************  大符  ************************************************ 
         
 
-        //大苻叶子初筛选
+        //大符叶子初筛选
         bool is_leaf = (area > leaf_min_area && area < leaf_max_area);
         float leaf_hw_ratio;
         if (rect.size.width > rect.size.height) {
@@ -501,7 +491,7 @@ void BuffDetection::findLeaf(candidateRect_Buff &Leaf) {
             Vertex[i] = Leaf.Vertex[i];
         }
 
-        ////////可以继续优化一下算法，降低复杂度
+        ////////可以继续优化一下算法，降低复杂度  （为什么不是0-90 90-180 因为画面不是正方形。）
         if (leaf_.angle >= 0 && leaf_.angle < 91 || leaf_.angle >= 353 && leaf_.angle <= 360) {
             leaf_target[0] = Vertex[0];
             leaf_target[1] = Vertex[1];
@@ -618,6 +608,7 @@ void BuffDetection::findLeaf(candidateRect_Buff &Leaf) {
             first_buff_target.emplace_back(buff_target_);
 
 
+            //TODO:好像没有用到过。
             now_Point = buff.center;
             //判断是否切换了目标
                 // 先判断有没有切换目标，如果没有切换则为 True
@@ -655,7 +646,7 @@ void BuffDetection::Get_final_buff() {
            
             cv::Mat outputImage = warpAndConvertToGray(src_ , x.Val_points);
             
-           if(classifier(outputImage, TrueHandleClass , HandleModelPath))
+           if(classifier(outputImage, TrueHandleClass , HandleModelPath))  // 符柄分类  Handle
             { 
                 
                 final_buff_target.emplace_back(x);
@@ -777,7 +768,7 @@ void BuffDetection::show(cv::Mat &show_src) {
    * @brief 保存图片
    */
 
-void BuffDetection::ImWrite_frame(cv::Mat &Write_image) {
+void BuffDetection::ImWrite_frame(cv::Mat &Write_image) {   //  帮助保存图片作为模型训练集
     if (frameCount % 1 == 0) {
 
         // 构造文件名，包含完整的路径
