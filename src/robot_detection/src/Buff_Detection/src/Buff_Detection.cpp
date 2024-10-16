@@ -129,8 +129,6 @@ std::vector<BuffTarget> BuffDetection::Detection(cv::Mat &frame_) {
 
 #endif
 
-//    std::cout<<final_buff_target.size()<<"\n";
-
     // 两个容器都进行了用前清空操作！
     //判断是否为空；
     
@@ -138,34 +136,7 @@ std::vector<BuffTarget> BuffDetection::Detection(cv::Mat &frame_) {
     return final_buff_target;
 
 }
-
-
-/**
-* @brief 计算角度函数
-* @param  提供了两种模式_180_360的计算
-* @return  根据模式返回对应的角度
-*/
-
-float BuffDetection::getAngle(cv::Point2f pt1, cv::Point2f pt2, cv::Point2f pt0, std::string mode) {
-    float _circleAngle360, _circleAngle180;
-    float dx1 = pt1.x - pt0.x;
-    float dy1 = pt1.y - pt0.y;
-    float dx2 = pt2.x - pt0.x;
-    float dy2 = pt2.y - pt0.y;
-    float angle_line = (dx1 * dx2 + dy1 * dy2) / sqrtf((dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2) + 1e-10f);
-    _circleAngle180 = acosf(angle_line) * 180.0f / 3.141592653f;
-
-    if (pt0.y < pt1.y) {
-        _circleAngle360 = 360.0f - _circleAngle180;
-        _circleAngle180 = -_circleAngle180;
-    } else {
-        _circleAngle360 = _circleAngle180;
-    }
-    if (mode == "360") { return _circleAngle360; }
-    else { return _circleAngle180; }
-}
-
-
+ 
 /**
 * @brief 对图像初步增强、采用图像分割、膨胀和均值滤波 等
 * @param  时间消耗长_较慢
@@ -762,6 +733,30 @@ void BuffDetection::show(cv::Mat &show_src) {
  
 
 ///////////////////////////--------------------------工具函数-------------------------------///////////////////////////
+/**
+* @brief 计算角度函数
+* @param  提供了两种模式_180_360的计算
+* @return  根据模式返回对应的角度
+*/
+
+float BuffDetection::getAngle(cv::Point2f pt1, cv::Point2f pt2, cv::Point2f pt0, std::string mode) {
+    float _circleAngle360, _circleAngle180;
+    float dx1 = pt1.x - pt0.x;
+    float dy1 = pt1.y - pt0.y;
+    float dx2 = pt2.x - pt0.x;
+    float dy2 = pt2.y - pt0.y;
+    float angle_line = (dx1 * dx2 + dy1 * dy2) / sqrtf((dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2) + 1e-10f);
+    _circleAngle180 = acosf(angle_line) * 180.0f / 3.141592653f;
+
+    if (pt0.y < pt1.y) {
+        _circleAngle360 = 360.0f - _circleAngle180;
+        _circleAngle180 = -_circleAngle180;
+    } else {
+        _circleAngle360 = _circleAngle180;
+    }
+    if (mode == "360") { return _circleAngle360; }
+    else { return _circleAngle180; }
+}
 
 
 /**
