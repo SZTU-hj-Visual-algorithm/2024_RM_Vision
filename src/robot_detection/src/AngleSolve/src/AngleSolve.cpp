@@ -167,10 +167,10 @@ Eigen::Vector3d AngleSolve::pnpSolve_buff(cv::Point2f *p, int type) {
 
     if(type == BUFF_NO){
         ps = {
-                {-buff_w / 2 , -buff_h / 2, 0., 0.},
-                { buff_w / 2 , -buff_h / 2, 0., 0.},
-                { buff_w / 2 ,  buff_h / 2, 0., 0.},
-                {-buff_w / 2 ,  buff_h / 2, 0., 0.}
+                {-buff_w / 2 , -buff_h / 2,  0.},
+                { buff_w / 2 , -buff_h / 2,  0.},
+                { buff_w / 2 ,  buff_h / 2,  0.},
+                {-buff_w / 2 ,  buff_h / 2,  0.}
         };
         pu.push_back(p[3]);
         pu.push_back(p[2]);
@@ -179,10 +179,10 @@ Eigen::Vector3d AngleSolve::pnpSolve_buff(cv::Point2f *p, int type) {
     }
     else if(type == BUFF_YES){
         ps = {
-                {-buff_w / 2 , -buff_h / 2, 0., 0.},
-                { buff_w / 2 , -buff_h / 2, 0., 0.},
-                { buff_w / 2 ,  buff_h / 2, 0., 0.},
-                {-buff_w / 2 ,  buff_h / 2, 0., 0.}
+                {-buff_w / 2 , -buff_h / 2, 0.},
+                { buff_w / 2 , -buff_h / 2, 0.},
+                { buff_w / 2 ,  buff_h / 2, 0.},
+                {-buff_w / 2 ,  buff_h / 2, 0.}
         };
         pu.push_back(p[3]);
         pu.push_back(p[2]);
@@ -192,10 +192,10 @@ Eigen::Vector3d AngleSolve::pnpSolve_buff(cv::Point2f *p, int type) {
     else if(type == BUFF_R)
     {
                 ps = {
-                {-r_w / 2 , -r_h / 2, 0., 0.},
-                { r_w / 2 , -r_h / 2, 0., 0.},
-                { r_w / 2 ,  r_h / 2, 0., 0.},
-                {-r_w / 2 ,  r_h / 2, 0., 0.}
+                {-r_w / 2 , -r_h / 2, 0.},
+                { r_w / 2 , -r_h / 2, 0.},
+                { r_w / 2 ,  r_h / 2, 0.},
+                {-r_w / 2 ,  r_h / 2, 0.}
         };
         pu.push_back(p[3]);
         pu.push_back(p[2]);
