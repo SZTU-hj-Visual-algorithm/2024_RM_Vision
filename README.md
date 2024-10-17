@@ -381,4 +381,91 @@ if (leaf_.angle >= 0 && leaf_.angle < 91 || leaf_.angle >= 353 && leaf_.angle <=
 
 </details>
 
-#### 5.3
+
+#### 5.3 模型推理
+>该分类器的实现基于 OpenCV 的 DNN（深度神经网络）模块来加载和推理 ONNX 模型，并返回一个布尔值
+
+
+``` mermaid
+graph TD;
+    A[模型加载]
+    B[图像转换为blob（四维数组）]
+    C[设置网络的输入]
+    D[前向传播forward]
+    E[找到最高概率的类别]
+    F[分类判断]
+    G[释放内存,返回结果]
+    A -->B;
+    B --> C;
+    C --> D;
+    D --> D1[输出prob表示类别的概率分布]
+    D --> E;
+    E --> F;
+    F --> G;
+
+```
+
+<details>
+<summary>模型推理代码</summary>
+
+```c++
+bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
+    double confidence;
+    size_t classId;
+    // 加载ONNX模型
+
+    cv::dnn::Net net = cv::dnn::readNetFromONNX(ModePath);
+
+    // 将图像转换为blob
+    cv::Mat blob = cv::dnn::blobFromImage(src, 1.0, cv::Size(30, 30), cv::Scalar(), true, false);
+
+    // 设置网络的输入
+    net.setInput(blob);
+
+    // 进行前向传播以获取输出
+    cv::Mat prob = net.forward();
+
+    // 找到概率最高的类别
+    cv::Point classIdPoint;
+    minMaxLoc(prob.reshape(1, 1), nullptr, &confidence, nullptr, &classIdPoint);
+
+    classId = classIdPoint.x;
+
+    if (classId == id && confidence * 100 > leaf_classifier_confidence) {
+        blob.release();
+        prob.release();
+        return true;
+    } else {
+
+        blob.release();
+        prob.release();
+        return false;
+    }
+}
+```
+</details>
+
+
+#### 5.3 目标
+
+**5.3.1目标的点顺序（固定）**
+
+<div style="text-align: center;">
+    <img src="https://github.com/user-attachments/assets/3be143fd-07fa-4dd7-b3cd-bded828b2570" 
+         style="width: 35%; height: 30%; display: inline-block; margin: 10px;" />
+    <img src="https://github.com/user-attachments/assets/1f38ec10-8b07-424e-8ff2-dea91c49e5ab" 
+         style="width: 31%; height: 30%; display: inline-block; margin: 10px;" />
+</div>
+
+**5.3.2目标干扰**
+
+<span style="color: red;">1.打中十环后的图案和目标图案是非常相似的,使用要使用符柄进行二筛。</span>
+
+<img src="https://github.com/user-attachments/assets/ce551c91-1c3a-4714-9411-b6fde08ac6bf" 
+         style="width: 80%; height: 30%;"/>
+
+
+<span style="color: red;">2.出现两个目标进行二筛。</span>
+
+<img src="https://github.com/user-attachments/assets/9ebc3ef1-bb9e-4982-913b-6e81f4d70d6b" 
+         style="width: 80%; height: 30%;"/>
