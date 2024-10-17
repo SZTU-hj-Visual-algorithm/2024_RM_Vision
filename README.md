@@ -10,6 +10,8 @@
     - [3. 轮廓的识别](#3-轮廓的识别)
     - [4. R的识别流程](#4-对R的识别流程)
     - [5. Leaf识别](#5-对Leaf识别)
+        - [5.1 抽象概念介绍](#5.1-抽象概念介绍)
+        - [5.2 固定坐标](#5.2-固定坐标)
 4. [能量机关预测](#能量机关预测)
  
 
@@ -469,3 +471,4 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 
 <img src="https://github.com/user-attachments/assets/9ebc3ef1-bb9e-4982-913b-6e81f4d70d6b" 
          style="width: 40%; height: 30%;"/>
+
