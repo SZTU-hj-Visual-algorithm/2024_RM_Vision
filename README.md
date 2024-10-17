@@ -462,10 +462,10 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 <span style="color: red;">1.打中十环后的图案和目标图案是非常相似的,使用要使用符柄进行二筛。</span>
 
 <img src="https://github.com/user-attachments/assets/ce551c91-1c3a-4714-9411-b6fde08ac6bf" 
-         style="width: 80%; height: 30%;"/>
+         style="width: 40%; height: 30%;"/>
 
 
 <span style="color: red;">2.出现两个目标进行二筛。</span>
 
 <img src="https://github.com/user-attachments/assets/9ebc3ef1-bb9e-4982-913b-6e81f4d70d6b" 
-         style="width: 80%; height: 30%;"/>
+         style="width: 40%; height: 30%;"/>
