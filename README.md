@@ -507,8 +507,7 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 ---
 
 ## 能量机关预测
-
-<video width="40%" height="30%" controls>
+<video width="100%" height="80%" controls>
   <source src="https://github.com/user-attachments/assets/6f0700aa-6c86-446e-a70a-2b5157fbbb08" type="video/mp4">
 </video>
 
