@@ -312,8 +312,13 @@ graph TD;
 <details>
 <summary>符叶的样子</summary>
 <img src="https://github.com/user-attachments/assets/9b1bcbdf-a34c-4fe6-8cab-9495270a5493"  style="width: 30% ; height:30%; margin: auto; display: block;" />
- 
 </details>
-
- 
- 
+<details>
+<summary>符柄的样子</summary>
+<img src="https://github.com/user-attachments/assets/f0009877-876a-42a4-ab9b-08d17f3aeba0"  style="width: 30% ; height:30%; margin: auto; display: block;" />
+<img src="https://github.com/user-attachments/assets/1e3b01d1-bb53-4b00-b7ec-ce5c256ed06a"  style="width: 30% ; height:30%; margin: auto; display: block;" />
+</details>
+<details>
+<summary>目标 target</summary>
+<img src="https://github.com/user-attachments/assets/98da0f53-beb0-4345-ad2f-57454d03c97d"  style="width: 30% ; height:30%; margin: auto; display: block;" />
+</details>
