@@ -311,14 +311,74 @@ graph TD;
 
 <details>
 <summary>符叶的样子</summary>
-<img src="https://github.com/user-attachments/assets/9b1bcbdf-a34c-4fe6-8cab-9495270a5493"  style="width: 30% ; height:30%; margin: auto; display: block;" />
+<img src="https://github.com/user-attachments/assets/dd4369b6-f521-4c9c-8524-591fcb003122"  style="width: 30% ; height:30%; margin: auto " />
+<img src="https://github.com/user-attachments/assets/9b1bcbdf-a34c-4fe6-8cab-9495270a5493"  style="width: 30% ; height:30%; margin: auto " />
 </details>
 <details>
 <summary>符柄的样子</summary>
-<img src="https://github.com/user-attachments/assets/f0009877-876a-42a4-ab9b-08d17f3aeba0"  style="width: 30% ; height:30%; margin: auto; display: block;" />
-<img src="https://github.com/user-attachments/assets/1e3b01d1-bb53-4b00-b7ec-ce5c256ed06a"  style="width: 30% ; height:30%; margin: auto; display: block;" />
+<img src="https://github.com/user-attachments/assets/f0009877-876a-42a4-ab9b-08d17f3aeba0"  style="width: 30% ; height:30%; margin: auto " />
+<img src="https://github.com/user-attachments/assets/1e3b01d1-bb53-4b00-b7ec-ce5c256ed06a"  style="width: 30% ; height:30%; margin: auto " />
 </details>
 <details>
 <summary>目标 target</summary>
-<img src="https://github.com/user-attachments/assets/98da0f53-beb0-4345-ad2f-57454d03c97d"  style="width: 30% ; height:30%; margin: auto; display: block;" />
+<img src="https://github.com/user-attachments/assets/98da0f53-beb0-4345-ad2f-57454d03c97d"  style="width: 30% ; height:10%; margin: auto  " />
 </details>
+
+
+#### 5.2 固定坐标 
+
+Qustion: 🤔为什么需要固定坐标?
+
+Answer: **因为符是旋转的，而是使用旋转矩形后，随着角度变化，符叶四个点会发生变化。方便后期仿射变换得到要求的ROI图像**
+
+
+**坐标顺序（当前代码以图1为正参照）**
+
+- leaf_target[0]        左下
+- leaf_target[1]        左上
+- leaf_target[2]        右上
+- leaf_target[3]        右下
+
+<div style="text-align: center;">
+    <img src="https://github.com/user-attachments/assets/efcc6ad6-940c-4787-9a9a-bcbac084e5a6" 
+         style="width: 30%; height: 30%; display: inline-block; margin: 10px;" />
+    <img src="https://github.com/user-attachments/assets/2b67216a-99c3-4f4a-88f8-426cff0248f3" 
+         style="width: 25%; height: 30%; display: inline-block; margin: 10px;" />
+</div>
+
+
+<details>
+<summary>对应代码</summary>
+
+```c++
+if (leaf_.angle >= 0 && leaf_.angle < 91 || leaf_.angle >= 353 && leaf_.angle <= 360) {
+            leaf_target[0] = Vertex[0];
+            leaf_target[1] = Vertex[1];
+            leaf_target[2] = Vertex[2];
+            leaf_target[3] = Vertex[3];
+
+        } else if (leaf_.angle >= 91 && leaf_.angle < 181) {
+            leaf_target[0] = Vertex[3];
+            leaf_target[1] = Vertex[0];
+            leaf_target[2] = Vertex[1];
+            leaf_target[3] = Vertex[2];
+
+        } else if (leaf_.angle >= 181 && leaf_.angle < 266) {
+            leaf_target[0] = Vertex[2];
+            leaf_target[1] = Vertex[3];
+            leaf_target[2] = Vertex[0];
+            leaf_target[3] = Vertex[1];
+
+        } else {
+            leaf_target[0] = Vertex[1];
+            leaf_target[1] = Vertex[2];
+            leaf_target[2] = Vertex[3];
+            leaf_target[3] = Vertex[0];
+        }
+```
+
+**为什么不是0 90 180 270 这样固定。自己可以试试看。毕竟这都是测出来的，大概是跟分辨率不是正比例有关系吧**
+
+</details>
+
+#### 5.3
