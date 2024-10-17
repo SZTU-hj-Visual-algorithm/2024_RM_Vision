@@ -303,7 +303,7 @@ graph TD;
     K --> F;
 ```
 
-#### 5.1 抽象介绍
+#### 5.1 抽象概念介绍
 概念：(如叶子)
 - 符叶 leaf 
 - 符柄 handle
@@ -311,7 +311,7 @@ graph TD;
 
 <details>
 <summary>符叶的样子</summary>
-<img src="https://github.com/user-attachments/assets/9b1bcbdf-a34c-4fe6-8cab-9495270a5493"  style="width: 70%; margin: auto; display: block;" />
+<img src="https://github.com/user-attachments/assets/9b1bcbdf-a34c-4fe6-8cab-9495270a5493"  style="width: 30% ; height:30%; margin: auto; display: block;" />
  
 </details>
 
