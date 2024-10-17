@@ -14,7 +14,7 @@
         - [5.1 抽象概念介绍](#5-1-抽象概念介绍)
         - [5.2 固定坐标](#5-2-固定坐标)
         - [5.3 目标](#5-3-目标)
-  
+3. [能量机关预测](#能量机关预测)
 ## 🚀文件介绍
 
 *参数配置文件*
@@ -304,12 +304,37 @@ graph TD;
 #### 5.0 计算角度
 
 计算两个向量之间夹角的函数
-给定三个点 `pt1(x1, y1)`, `pt2(x2, y2)`, `pt0(x0, y0)`，向量 `pt1 - pt0` 和 `pt2 - pt0` 的坐标分别为：
+给定三个点 `pt1(x1, y1)`, `pt2(x2, y2)`, `pt0(x0, y0)` 
 
+步骤：
+1. 向量点积公式
+2. 计算两个向量的夹角余弦
+3. 反余弦算夹角
+4. 角度范围调整（根据点 pt0.y 和 pt1.y 的相对位置，对角度范围进行调整）
+<details>
+<summary>具体代码</summary>
 
-\[
-\mathbf{v1} \cdot \mathbf{v2} = (dx1 \cdot dx2 + dy1 \cdot dy2)
-\]
+```c++
+float BuffDetection::getAngle(cv::Point2f pt1, cv::Point2f pt2, cv::Point2f pt0, std::string mode) {
+    float _circleAngle360, _circleAngle180;
+    float dx1 = pt1.x - pt0.x;
+    float dy1 = pt1.y - pt0.y;
+    float dx2 = pt2.x - pt0.x;
+    float dy2 = pt2.y - pt0.y;
+    float angle_line = (dx1 * dx2 + dy1 * dy2) / sqrtf((dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2) + 1e-10f);
+    _circleAngle180 = acosf(angle_line) * 180.0f / 3.141592653f;
+
+    if (pt0.y < pt1.y) {
+        _circleAngle360 = 360.0f - _circleAngle180;
+        _circleAngle180 = -_circleAngle180;
+    } else {
+        _circleAngle360 = _circleAngle180;
+    }
+    if (mode == "360") { return _circleAngle360; }
+    else { return _circleAngle180; }
+}
+```
+</details>
 
 
 #### 5.1 抽象概念介绍
@@ -478,4 +503,12 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 
 <img src="https://github.com/user-attachments/assets/9ebc3ef1-bb9e-4982-913b-6e81f4d70d6b" 
          style="width: 40%; height: 30%;"/>
+
+---
+
+## 能量机关预测
+
+<img src="https://github.com/user-attachments/assets/6f0700aa-6c86-446e-a70a-2b5157fbbb08" 
+         style="width: 40%; height: 30%;"/>
+
 
