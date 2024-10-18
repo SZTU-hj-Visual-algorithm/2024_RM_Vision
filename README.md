@@ -519,5 +519,12 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 
 ### 2.大能量机关预测
 
-此方案参考了[西安电子科技大学-IRobot战队能量机关拟合部分](https://github.com/SanZoom/RM2022-Infantry-Vision/blob/master/src/Rune/Fitting.cpp),感谢提供思路！
-此外数据预测处理部分参考了[桂林电子科技大学Evolution战队](https://github.com/freezing00/Baldr/blob/main/Src/angle/CoordinateSolver/BuffCoordinateSolver.cpp),感谢提供思路！
+采集目标转动的角度，使用傅里叶变换，拟合目标方程，得到幅值、相位等。再根据弹道飞行时间+发弹延时 求解预测未来时刻的旋转角度
+
+此方案参考开源---感谢提供思路！
+- [西安电子科技大学-IRobot战队能量机关拟合部分](https://github.com/SanZoom/RM2022-Infantry-Vision/blob/master/src/Rune/Fitting.cpp) 
+- [桂林电子科技大学Evolution战队](https://github.com/freezing00/Baldr/blob/main/Src/angle/CoordinateSolver/BuffCoordinateSolver.cpp)
+
+预测思路可以看佛科大的大能量机关推导
+
+- [佛山科学技术学院醒狮战队大能量机关推导](https://github.com/Ash1104/RoboMaster2021-FOSU-AWAKENLION-OpenSource/blob/master/%E5%A4%A7%E8%83%BD%E9%87%8F%E6%9C%BA%E5%85%B3%E6%8E%A8%E5%AF%BC.pdf)
