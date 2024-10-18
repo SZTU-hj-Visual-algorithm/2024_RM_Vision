@@ -17,7 +17,7 @@
 3. [能量机关预测](#能量机关预测)
 4. [如何调试](#如何调试)
 5. [发展](#发展)
-
+6. [测试视频](#测试视频)
 ## 🚀文件介绍
 
 *参数配置文件*
@@ -566,7 +566,156 @@ graph TD;
 4. 能量机关不会感应击打，需要遥控操控:`0 改变颜色 ; 1-6切换目标 ,且1-6图案不一样`;
 5. 识别不到可能是因为曝光严重，可以看看`二值化图像是否过曝`,可以滑动条修改`通道分割阈值`
 6. 不要将自启动程序改成`Buff_Debug`
-7. ...
+7. 图传模式：`大符C` `小符X`
+8. `神经网络模型训练看看就好,效果还行,实际迭代了几十个版本`
+<details>
+<summary>模型训练代码</summary>
+
+```python
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision.transforms as transforms
+from matplotlib import pyplot as plt
+from torchvision.datasets import ImageFolder
+from torch.utils.data import DataLoader
+import torch.onnx
+from tqdm import tqdm
+from tool.Matplot_Tool import plot_data
+from tool.Train_Tool import train_model, SaveModel, EarlyStopping
+from tool.Train_Tool import evaluate_model
+
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.nn.utils import clip_grad_norm_
+
+# 数据转换和加载
+transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1) ,
+    # transforms.RandomHorizontalFlip(),
+    # transforms.RandomVerticalFlip(),
+    # transforms.RandomRotation(10),
+    transforms.ToTensor(),
+ ])
+test_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.ToTensor()
+
+
+])
+# 数据集的根目录包含两个子文件夹，每个子文件夹对应一个类别
+train_dataset = ImageFolder(root='HandleDatasets/train', transform=transform)
+test_dataset = ImageFolder(root='HandleDatasets/test', transform=test_transform)
+
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+
+
+class SimpleLeNet5(nn.Module):
+    def __init__(self, num_classes):
+        super(SimpleLeNet5, self).__init__()
+        self.conv1 = nn.Conv2d(1, 6, kernel_size=2)
+
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv2 = nn.Conv2d(6, 12, kernel_size=2)
+
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(12 * 6 * 6, 256)   #432个参数
+        self.dropout= nn.Dropout(0.5)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, num_classes)
+
+
+    def forward(self, x):
+        # print(x.shape)
+        x = self.pool1(torch.relu(self.conv1(x)))
+        x = self.pool2(torch.relu(self.conv2(x)))
+        # print(x.shape)
+        x = x.view(x.size(0), -1)
+        x = torch.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = torch.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = torch.relu(self.fc3(x))
+        x = self.dropout(x)
+        x = self.fc4(x)
+        return x
+
+def main():
+    # 创建模型并将其移动到GPU上
+    num_classes = 2
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    model = SimpleLeNet5(num_classes=num_classes).to(device)
+    # 实例化一个TensorBoard写入器
+    # writer = SummaryWriter()
+    # 定义损失函数和优化器
+    num_epochs = 100
+    patience = 10  # 设置为你认为合适的值
+
+    learning_rate = 0.005
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    scheduler = CosineAnnealingLR(optimizer, eta_min=0.0001 , T_max=num_epochs)
+
+    # 定义余弦退火学习率调度器
+    # 训练模型
+
+    train_losses, test_losses, train_accs, test_accs = [], [], [], []
+    learning_rates = []
+    best_val_acc = 0.0
+    best_epoch = 0
+    early_stopping = EarlyStopping(patience=10, verbose=True)
+    for epoch in range(num_epochs):
+        progress_bar_train = tqdm(train_loader, desc=f'Train epoch {epoch + 1} / {num_epochs}', mininterval=0.3)
+        train_loss, train_acc = train_model(model, progress_bar_train, criterion, optimizer, device, epoch,
+                                            progress_bar_train)
+        train_losses.append(train_loss)
+        train_accs.append(train_acc)
+
+        progress_bar_val = tqdm(test_loader, desc=f'Val epoch {epoch + 1} / {num_epochs}', mininterval=0.3)
+        test_loss, test_acc = evaluate_model(model, progress_bar_val, criterion, device)
+        test_losses.append(test_loss)
+        test_accs.append(test_acc)
+
+        # 更新学习率
+        scheduler.step()
+        # 记录学习率
+        current_lr = optimizer.param_groups[0]['lr']
+        learning_rates.append(current_lr)
+        # 检查是否发生了过拟合
+        early_stopping(test_loss,model,device)
+        # 如果早停法触发，则提前结束训练
+        if early_stopping.early_stop:
+            # SaveModel(model, device)
+            print("Early stopping")
+            break
+
+        # 打印训练和验证信息
+        print(f'Train - Epoch [{epoch + 1}/{num_epochs}] - Loss: {train_loss:.6f}, Accuracy: {train_acc:.2f}%')
+        print(f'Validation - Epoch [{epoch + 1}/{num_epochs}] - Loss: {test_loss:.6f}, Accuracy: {test_acc:.2f}%')
+
+        # 绘制损失和准确率曲线
+    plot_data(train_losses, test_losses, train_accs, test_accs)
+
+    # 绘制学习率变化图像
+    plt.figure()
+    plt.plot(range(1, len(learning_rates) + 1), learning_rates, label='Learning Rate')
+    plt.xlabel('Epoch')
+    plt.ylabel('Learning Rate')
+    plt.title('Learning Rate Schedule')
+    plt.legend()
+    plt.show()
+    # 导出为ONNX格式（尽量使ONNX文件小于1MB）
+    SaveModel(model , device)
+    # 绘制Loss曲线图
+
+if __name__ == "__main__":
+    main()
+
+```
+</details>
 
 
 ## 发展
@@ -659,8 +808,16 @@ void BuffPrediction::calculateRotateSpeed(BuffTarget &buffTargetPrediction)
 
 2. `可以试试别的预测方案;`
 3. `能力强可以从头写,注意代码可读性与规范化。`
-4. `能量机关最好可以弹丸检测,检测环数,不然只能听个响`
-5. `能量机关需要大量测试！！！能量机关需要大量测试！！！能量机关需要大量测试！！！`
-6. `本代码后续已不打算优化,代码规范......`
+4. 🚨`能量机关最好可以弹丸检测,检测环数,不然只能听个响`
+5. 🚨`能量机关需要大量测试！！！能量机关需要大量测试！！！能量机关需要大量测试！！！`
+6. 🚨`本代码后续已不打算优化,代码规范......`
+7. `场上发现曝光其实非常理想，所以R标识别可以不用这么保险，其甚至可以直接传统识别到，轮廓特别干净`
 
 
+## 测试视频
+
+`下面是我的仓库,垃圾堆中有些许测试视频`
+
+1. [hj_vision](https://gitee.com/icccc8888/hj_vision)
+2. [video_test](https://gitee.com/icccc8888/video_test)
+3. [buff_debug](https://gitee.com/icccc8888/buff_dubug)
