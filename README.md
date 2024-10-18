@@ -659,6 +659,6 @@ void BuffPrediction::calculateRotateSpeed(BuffTarget &buffTargetPrediction)
 3. `能力强可以从头写,注意代码可读性与规范化。`
 4. `能量机关最好可以弹丸检测,检测环数,不然只能听个响`
 5. `能量机关需要大量测试！！！能量机关需要大量测试！！！能量机关需要大量测试！！！`
-
+6. `本代码后续已不打算优化,代码规范......`
 
 
