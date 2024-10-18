@@ -492,7 +492,11 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
          style="width: 35%; height: 30%; display: inline-block; margin: 10px;" />
     <img src="https://github.com/user-attachments/assets/1f38ec10-8b07-424e-8ff2-dea91c49e5ab" 
          style="width: 31%; height: 30%; display: inline-block; margin: 10px;" />
+    <img src="https://github.com/user-attachments/assets/434cc57d-c2f6-4c66-8c8a-8ba1c8f20c01" 
+         style="width: 31%; height: 30%; display: inline-block; margin: 10px;" />
 </div>
+
+`图三是目前代码顺序（错误的）虽然能正常测距，需要改成一致的。`
 
 **5.3.2目标干扰**
 
