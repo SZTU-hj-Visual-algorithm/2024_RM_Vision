@@ -512,4 +512,12 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 </video>
 
 
-# 等待更新.....
+### 1.小能量机关预测
+
+固定预测角度就行。没啥难度...
+
+
+### 2.大能量机关预测
+
+此方案参考了[西安电子科技大学-IRobot战队能量机关拟合部分](https://github.com/SanZoom/RM2022-Infantry-Vision/blob/master/src/Rune/Fitting.cpp),感谢提供思路！
+此外数据预测处理部分参考了[桂林电子科技大学Evolution战队](https://github.com/freezing00/Baldr/blob/main/Src/angle/CoordinateSolver/BuffCoordinateSolver.cpp),感谢提供思路！
