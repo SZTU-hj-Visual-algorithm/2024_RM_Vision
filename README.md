@@ -15,6 +15,7 @@
         - [5.2 固定坐标](#5-2-固定坐标)
         - [5.3 目标](#5-3-目标)
 3. [能量机关预测](#能量机关预测)
+4. [如何调试](#如何调试)
 ## 🚀文件介绍
 
 *参数配置文件*
@@ -482,7 +483,7 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 
 #### 5.3 目标
 
-**5.3.1目标的点顺序（固定）**
+**5.3.1目标的点顺序（固定|预测框的点位也要一样）**
 
 <div style="text-align: center;">
     <img src="https://github.com/user-attachments/assets/3be143fd-07fa-4dd7-b3cd-bded828b2570" 
@@ -528,3 +529,136 @@ bool BuffDetection::classifier(cv::Mat &src, size_t id, std::string &ModePath) {
 预测思路可以看佛科大的大能量机关推导
 
 - [佛山科学技术学院醒狮战队大能量机关推导](https://github.com/Ash1104/RoboMaster2021-FOSU-AWAKENLION-OpenSource/blob/master/%E5%A4%A7%E8%83%BD%E9%87%8F%E6%9C%BA%E5%85%B3%E6%8E%A8%E5%AF%BC.pdf)
+
+
+## 如何调试
+
+```mermaid
+graph TD;
+    A[检查相机的内外参是否对应]
+    B[8m击打装甲板是否精确]
+    C[调整抬枪补偿参数]
+    C1[运行能量机关Debug模式]
+    D[首次程序先将图像中心靠近R标]
+    E[进入识别预测模型]
+    F[击打]
+    G[调节滑动条修改模型预测量]
+    
+    A --> B;
+    B --> |否|C;
+    B --> |是|D;
+    D --> C1;
+    C1 --> E;
+    E --> F;
+    F --> G;
+
+```
+
+**🚨注意事项**
+
+`Debug模式是针对性设计的，为了满足上场快速调式、场地道具测试快速调试、日常快速调试，主程序Robot_Detection才是核心`
+
+1. `遥控控制大小符`需要自行，叫电控改代码。也可以将`vision_mode` 自瞄模式改成大符/小符模式;
+2. 大符预测中的`DT`与`DELAY_TIME_`参数会影响预测的，可以滑动条改变一下看看效果;
+3. 代码会自动识别顺逆时针，但小概率出现失误。跟`_buffAngleList.size() > 10`有关，`（程序刚进入采集时候突然切换符叶导致数据空间上不连续，影响判断）`;
+4. 能量机关不会感应击打，需要遥控操控:`0 改变颜色 ; 1-6切换目标 ,且1-6图案不一样`;
+5. 识别不到可能是因为曝光严重，可以看看`二值化图像是否过曝`,可以滑动条修改`通道分割阈值`
+6. 不要将自启动程序改成`Buff_Debug`
+7. ...
+
+
+## 发展
+
+1. `数据预处理部分可以改成卡尔曼`
+<details>
+<summary>代码</summary>
+
+```c++
+void BuffPrediction::calculateRotateSpeed(BuffTarget &buffTargetPrediction)
+{
+    //定义静态过去和现在角度；
+    static double nowAngle = 0.0f;
+    static double lastAngle = 0.0f;
+    static int count = 0;
+    //定义过去和现在时间
+    static double lastTime = (double) cv::getTickCount() / cv::getTickFrequency() * 1000; // ms
+    double curTime = (double) cv::getTickCount() / cv::getTickFrequency() * 1000;
+//    double curTime_ = (double) cv::getTickCount() /  cv::getTickFrequency()*1000.0  ;
+//    std::cout<<curTime_<<std::endl;
+    //如果叶片没有跳变，则把过去和现在角度以及过去和现在速度置零
+//        std::cout<<leaf_.angle<<std::endl;
+    if (!_sameLeaf) {
+        lastAngle = nowAngle = _rotateSpeed.lastRotateSpeed = _rotateSpeed.nowRotateSpeed = 0.0f;
+        return;
+    }
+
+    //如果过去角度已经被清零，则过去角度进行初始化为现在绝对角度
+    if (lastAngle == 0.0f) {
+        lastAngle = buffTargetPrediction.leaf_angle;
+        return;
+    }
+
+    //每0.1s一次数据刷新
+    if (curTime - lastTime < 100 ) {
+        return;
+    }
+    //帧数递增
+    count++;
+    nowAngle = buffTargetPrediction.leaf_angle;
+    //计算实时角速度
+    _rotateSpeed.nowRotateSpeed = (float) fabs( angleToRadian((nowAngle - lastAngle)) * (1000.0f / (curTime - lastTime)));
+
+
+    //过去角度和时间更新
+    lastAngle = nowAngle;
+    lastTime = curTime;
+    //如果过去角速度已被清零，则对过去速度进行更新
+    if (_rotateSpeed.lastRotateSpeed == 0.0f) {
+        _rotateSpeed.lastRotateSpeed = _rotateSpeed.nowRotateSpeed;
+        return;
+    }
+    //防止出现异常数据
+    if (_rotateSpeed.nowRotateSpeed > 5 || _rotateSpeed.nowRotateSpeed < -5) {
+        return;
+    }
+
+    //如果速度没有替换最小速度，则计数加1
+    if (_speedRange.nowMinSpeed > _rotateSpeed.nowRotateSpeed) {
+        _speedRange.nowMinSpeed = _rotateSpeed.nowRotateSpeed;
+    } else {
+        _speedRange.minSameNumber++;
+    }
+    //如果速度没有替换最大速度，则计数加1
+    if (_speedRange.nowMaxSpeed < _rotateSpeed.nowRotateSpeed) {
+        _speedRange.nowMaxSpeed = _rotateSpeed.nowRotateSpeed;
+    } else {
+        _speedRange.maxSameNumber++;
+    }
+    //如果连续20帧没有刷新最小速度，则该速度为波谷速度（该速度一旦更新，便不再更新）
+    if (_speedRange.minSameNumber > 30 && !_speedRange.minSpeedFlag) {
+        _speedRange.realMinSpeed = _speedRange.nowMinSpeed;
+        _speedRange.minSpeedFlag = true;
+    }
+    //如果连续20帧没有刷新最大速度，则该速度为波峰速度（该速度一旦更新，便不再更新）
+    if (_speedRange.maxSameNumber > 30 && !_speedRange.maxSpeedFlag) {
+        _speedRange.realMaxSpeed = _speedRange.nowMaxSpeed;
+        _speedRange.maxSpeedFlag = true;
+    }
+
+    _rotateSpeed.realRotateSpeed = _rotateSpeed.nowRotateSpeed;
+
+    //赋予开火结构体现在的预测角度
+    fire.GetNowSpeed = _rotateSpeed.realRotateSpeed;
+}
+
+```
+</details>
+
+
+2. `可以试试别的预测方案;`
+3. `能力强可以从头写,注意代码可读性与规范化。`
+4. `能量机关最好可以弹丸检测,检测环数,不然只能听个响`
+5. `能量机关需要大量测试！！！能量机关需要大量测试！！！能量机关需要大量测试！！！`
+
+
+
